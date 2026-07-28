@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>Синтаксический практикум — повторение 5-го класса</title>
+  <style>
+    :root {
+      --bg: #f3f7fc;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #65718a;
+      --line: #dbe4f0;
+      --accent: #245ba8;
+      --accent-2: #e9f2ff;
+      --accent-dark: #163f7c;
+      --good: #18794e;
+      --good-bg: #e9f8f0;
+      --bad: #b42318;
+      --bad-bg: #fff0ee;
+      --warn: #9a6700;
+      --warn-bg: #fff7db;
+      --shadow: 0 18px 50px rgba(36, 56, 92, 0.10);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    html {
+      min-width: 320px;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(73, 139, 230, 0.13), transparent 34rem),
+        radial-gradient(circle at 100% 100%, rgba(74, 120, 197, 0.10), transparent 28rem),
+        var(--bg);
+      font-family: Montserrat, Inter, Arial, sans-serif;
+      line-height: 1.45;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid rgba(36, 91, 168, 0.35);
+      outline-offset: 3px;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--accent-dark);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      box-shadow: 0 8px 24px rgba(36, 91, 168, 0.25);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+      animation: appear 240ms ease both;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      border: 1px solid rgba(105, 126, 163, 0.18);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
+      overflow: hidden;
+    }
+
+    .hero-main {
+      padding: clamp(28px, 5vw, 62px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: var(--accent-dark);
+      background: var(--accent-2);
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 790px;
+      margin-bottom: 14px;
+      font-size: clamp(2.15rem, 4.5vw, 3.9rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    .hero-subtitle {
+      max-width: 700px;
+      margin-bottom: 28px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 170px;
+      gap: 14px;
+      margin: 26px 0 18px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 52px;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      padding: 0 15px;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .field input:focus {
+      border-color: var(--accent);
+    }
+
+    .class-input {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      align-items: center;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .class-prefix {
+      display: grid;
+      height: 50px;
+      place-items: center;
+      background: #f2f5fa;
+      font-weight: 900;
+    }
+
+    .class-input input {
+      border: 0;
+      border-radius: 0;
+      text-transform: uppercase;
+    }
+
+    .hero-side {
+      padding: clamp(24px, 4vw, 44px);
+      color: #fff;
+      background:
+        linear-gradient(160deg, rgba(255,255,255,0.09), transparent 45%),
+        linear-gradient(150deg, #2c6abe, #163d78 78%);
+    }
+
+    .hero-side h2 {
+      margin-bottom: 20px;
+      font-size: 1.45rem;
+    }
+
+    .algorithm {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: steps;
+    }
+
+    .algorithm li {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      align-items: start;
+      gap: 10px;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.94rem;
+    }
+
+    .algorithm li::before {
+      counter-increment: steps;
+      content: counter(steps);
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.26);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.11);
+      font-weight: 900;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 0;
+      border-radius: 14px;
+      padding: 0 20px;
+      color: #fff;
+      background: var(--accent);
+      font-weight: 900;
+      transition: transform 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(36, 91, 168, 0.22);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn.secondary {
+      color: var(--accent-dark);
+      background: var(--accent-2);
+    }
+
+    .btn.ghost {
+      min-height: 42px;
+      padding: 0 14px;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid var(--line);
+    }
+
+    .btn.danger {
+      color: var(--bad);
+      background: var(--bad-bg);
+    }
+
+    .btn.full {
+      width: 100%;
+    }
+
+    .form-error {
+      min-height: 22px;
+      margin: 0 0 8px;
+      color: var(--bad);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .menu-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .menu-heading h1 {
+      margin-bottom: 6px;
+      font-size: clamp(2rem, 5vw, 3.7rem);
+    }
+
+    .menu-heading p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .level-card {
+      overflow: hidden;
+    }
+
+    .level-card.advanced {
+      --accent: #b4363f;
+      --accent-dark: #7d2029;
+      --accent-2: #fff0f1;
+    }
+
+    .level-head {
+      padding: 26px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    }
+
+    .level-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .level-head h2 {
+      margin-bottom: 7px;
+      font-size: 1.75rem;
+    }
+
+    .level-head p {
+      margin: 0;
+      color: rgba(255,255,255,0.84);
+    }
+
+    .blocks {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+    }
+
+    .block-btn {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      text-align: left;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .block-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-2);
+    }
+
+    .block-number {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--accent-dark);
+      background: var(--accent-2);
+      font-weight: 900;
+    }
+
+    .block-title {
+      display: block;
+      font-weight: 900;
+    }
+
+    .block-meta {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .block-status {
+      color: var(--accent-dark);
+      font-size: 0.82rem;
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .menu-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      padding: 18px;
+    }
+
+    .trainer-shell {
+      overflow: hidden;
+    }
+
+    .trainer-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .trainer-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .session-label {
+      font-weight: 900;
+    }
+
+    .timer {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+    }
+
+    .progress-track {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e8edf5;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), #56a2ee);
+      transition: width 260ms ease;
+    }
+
+    .trainer-body {
+      padding: clamp(18px, 4vw, 38px);
+    }
+
+    .stage-kicker {
+      margin-bottom: 7px;
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stage-title {
+      margin-bottom: 8px;
+      font-size: clamp(1.55rem, 4vw, 2.55rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+
+    .stage-help {
+      margin-bottom: 20px;
+      color: var(--muted);
+    }
+
+    .sentence-board {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: 10px 2px;
+      min-height: 118px;
+      margin: 18px 0;
+      padding: clamp(18px, 3vw, 28px);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, rgba(243,247,252,0.62), rgba(255,255,255,0.84));
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.22rem, 3vw, 1.82rem);
+      line-height: 1.72;
+    }
+
+    .token-pair {
+      display: inline-flex;
+      align-items: end;
+      white-space: nowrap;
+    }
+
+    .word-token {
+      position: relative;
+      display: inline-grid;
+      min-width: 1.2em;
+      min-height: 70px;
+      grid-template-rows: 19px 36px 16px;
+      align-items: center;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 0 4px;
+      color: var(--text);
+      background: transparent;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    button.word-token:hover,
+    button.word-token.active {
+      border-color: var(--accent);
+      background: var(--accent-2);
+    }
+
+    .word-token.error-token {
+      border-color: var(--bad);
+      background: var(--bad-bg);
+    }
+
+    .pos-tag,
+    .member-tag {
+      min-height: 16px;
+      color: var(--muted);
+      font-family: Montserrat, Inter, Arial, sans-serif;
+      font-size: 0.64rem;
+      font-weight: 800;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .word-text {
+      position: relative;
+      display: inline-block;
+      padding: 0 1px 3px;
+    }
+
+    .member-subj .word-text {
+      border-bottom: 2px solid currentColor;
+    }
+
+    .member-pred .word-text {
+      border-bottom: 5px double currentColor;
+    }
+
+    .member-def .word-text {
+      text-decoration: underline wavy currentColor 1.5px;
+      text-underline-offset: 6px;
+    }
+
+    .member-obj .word-text {
+      border-bottom: 2px dashed currentColor;
+    }
+
+    .member-adv .word-text::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: -2px;
+      left: 0;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, currentColor 0 7px, transparent 7px 10px, currentColor 10px 12px, transparent 12px 16px);
+    }
+
+    .member-addr {
+      border-color: #8b5cf6;
+      background: #f5f0ff;
+    }
+
+    .member-addr .member-tag {
+      color: #6d3ad1;
+    }
+
+    .gap-btn {
+      display: grid;
+      width: 25px;
+      height: 34px;
+      place-items: center;
+      align-self: center;
+      border: 1px dashed #afbdd0;
+      border-radius: 8px;
+      padding: 0;
+      color: var(--accent-dark);
+      background: #fff;
+      font-family: Montserrat, Inter, Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .gap-btn.has-mark {
+      border-style: solid;
+      border-color: var(--accent);
+      background: var(--accent-2);
+    }
+
+    .gap-mark,
+    .ending-mark {
+      display: inline-flex;
+      min-width: 0.5em;
+      align-items: end;
+      padding-bottom: 18px;
+      font-weight: 900;
+    }
+
+    .ending-mark {
+      margin-left: -2px;
+    }
+
+    .toolbox {
+      margin: 18px 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #f9fbfe;
+    }
+
+    .toolbox-title {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 900;
+    }
+
+    .tools-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tool-btn,
+    .option-btn {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 8px 13px;
+      color: var(--text);
+      background: #fff;
+      font-weight: 800;
+    }
+
+    .tool-btn:hover,
+    .option-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .tool-btn.selected,
+    .option-btn.selected {
+      border-color: var(--accent);
+      color: var(--accent-dark);
+      background: var(--accent-2);
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+
+    .tool-btn.erase {
+      color: var(--bad);
+    }
+
+    .question-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+      margin: 20px 0;
+    }
+
+    .question-group {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fbfcfe;
+    }
+
+    .question-group h3 {
+      margin-bottom: 11px;
+      font-size: 0.95rem;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .option-btn {
+      flex: 1 1 auto;
+      min-width: min(150px, 100%);
+      font-size: 0.86rem;
+    }
+
+    .feedback {
+      display: none;
+      gap: 10px;
+      align-items: flex-start;
+      margin: 18px 0;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 700;
+    }
+
+    .feedback.show {
+      display: flex;
+    }
+
+    .feedback.good {
+      color: var(--good);
+      background: var(--good-bg);
+      border: 1px solid rgba(24, 121, 78, 0.2);
+    }
+
+    .feedback.bad {
+      color: var(--bad);
+      background: var(--bad-bg);
+      border: 1px solid rgba(180, 35, 24, 0.2);
+    }
+
+    .feedback.warn {
+      color: var(--warn);
+      background: var(--warn-bg);
+      border: 1px solid rgba(154, 103, 0, 0.2);
+    }
+
+    .feedback-icon {
+      flex: 0 0 auto;
+      font-size: 1.1rem;
+    }
+
+    .stage-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .review-card {
+      margin-top: 20px;
+      padding: clamp(18px, 4vw, 30px);
+      border-radius: 20px;
+      background: linear-gradient(145deg, #f4f8ff, #ffffff);
+      border: 1px solid #ccdaee;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .review-item {
+      border-radius: 14px;
+      padding: 13px 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .review-item span {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .result {
+      padding: clamp(24px, 5vw, 52px);
+    }
+
+    .result-head {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      align-items: center;
+      gap: 26px;
+      margin-bottom: 26px;
+    }
+
+    .score-ring {
+      display: grid;
+      width: 140px;
+      height: 140px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--accent-dark);
+      background:
+        radial-gradient(circle closest-side, white 75%, transparent 77% 99%),
+        conic-gradient(var(--accent) var(--score-angle, 0deg), #e7edf5 0);
+      font-size: 1.95rem;
+      font-weight: 950;
+    }
+
+    .result h1 {
+      margin-bottom: 8px;
+      font-size: clamp(2rem, 5vw, 3.7rem);
+    }
+
+    .result-meta {
+      color: var(--muted);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .skill-result {
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fbfcfe;
+    }
+
+    .skill-result strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 1.35rem;
+    }
+
+    .mistakes-list {
+      margin: 18px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mistakes-list li {
+      margin: 7px 0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: var(--bad-bg);
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 820px) {
+      .hero,
+      .levels-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side {
+        order: -1;
+      }
+
+      .question-grid,
+      .review-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        width: min(100% - 18px, 1180px);
+        padding-top: 12px;
+      }
+
+      .topbar {
+        margin-bottom: 12px;
+      }
+
+      .brand span:last-child {
+        display: none;
+      }
+
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side {
+        padding: 24px 20px;
+      }
+
+      .hero-main {
+        padding: 25px 18px;
+      }
+
+      .menu-heading,
+      .trainer-topline {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .level-head {
+        padding: 22px 18px;
+      }
+
+      .blocks {
+        padding: 12px;
+      }
+
+      .block-btn {
+        grid-template-columns: 40px 1fr;
+      }
+
+      .block-status {
+        grid-column: 2;
+        text-align: left;
+      }
+
+      .trainer-header {
+        padding: 16px;
+      }
+
+      .trainer-body {
+        padding: 17px 12px 22px;
+      }
+
+      .sentence-board {
+        gap: 8px 1px;
+        padding: 14px 10px;
+        font-size: 1.18rem;
+      }
+
+      .word-token {
+        min-height: 64px;
+        grid-template-rows: 17px 34px 14px;
+        padding: 0 2px;
+      }
+
+      .gap-btn {
+        width: 22px;
+      }
+
+      .stage-actions {
+        flex-direction: column-reverse;
+      }
+
+      .stage-actions .btn {
+        width: 100%;
+      }
+
+      .result {
+        padding: 22px 16px;
+      }
+
+      .result-head {
+        grid-template-columns: 1fr;
+      }
+
+      .score-ring {
+        width: 120px;
+        height: 120px;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .app {
+        width: 100%;
+        padding: 0;
+      }
+
+      .topbar,
+      .result-actions {
+        display: none !important;
+      }
+
+      .view {
+        display: none !important;
+      }
+
+      #resultView {
+        display: block !important;
+      }
+
+      .card {
+        border: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">СП</span>
+        <span>Синтаксический практикум</span>
+      </div>
+      <div class="top-actions">
+        <button class="btn ghost" id="homeButton" type="button" hidden>Меню</button>
+      </div>
+    </header>
+
+    <section class="view active" id="startView">
+      <div class="card hero">
+        <div class="hero-main">
+          <div class="eyebrow">Русский язык · начало 6-го класса</div>
+          <h1>Синтаксический практикум</h1>
+          <p class="hero-subtitle">Повторяем материал 5-го класса и учимся выполнять полный разбор предложения шаг за шагом.</p>
+
+          <div class="profile-grid">
+            <div class="field">
+              <label for="studentName">Фамилия и имя</label>
+              <input id="studentName" type="text" maxlength="80" autocomplete="name" placeholder="Например: Иванов Артём">
+            </div>
+            <div class="field">
+              <label for="classLetter">Класс</label>
+              <div class="class-input">
+                <span class="class-prefix">6</span>
+                <input id="classLetter" type="text" maxlength="2" placeholder="К" aria-label="Буква класса">
+              </div>
+            </div>
+          </div>
+          <p class="form-error" id="formError" role="alert"></p>
+          <button class="btn" id="openMenuButton" type="button">Перейти к уровням</button>
+          <button class="btn secondary" id="continueButton" type="button" hidden>Продолжить работу</button>
+        </div>
+
+        <aside class="hero-side">
+          <h2>В каждом предложении</h2>
+          <ol class="algorithm">
+            <li>Расставь знаки препинания.</li>
+            <li>Найди грамматическую основу.</li>
+            <li>Дай характеристику предложению.</li>
+            <li>Определи осложняющие элементы.</li>
+            <li>Подпиши части речи.</li>
+            <li>Подчеркни члены предложения.</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <section class="view" id="menuView">
+      <div class="menu-heading">
+        <div>
+          <div class="eyebrow" id="studentBadge"></div>
+          <h1>Выбери уровень</h1>
+          <p>Каждый блок содержит пять полных разборов. Прогресс сохраняется автоматически.</p>
+        </div>
+      </div>
+
+      <div class="levels-grid">
+        <article class="card level-card basic">
+          <div class="level-head">
+            <span class="level-label">С подсказками</span>
+            <h2>Базовый уровень</h2>
+            <p>От простого предложения — к обращениям и однородным членам.</p>
+          </div>
+          <div class="blocks" id="basicBlocks"></div>
+        </article>
+
+        <article class="card level-card advanced">
+          <div class="level-head">
+            <span class="level-label">Самостоятельно</span>
+            <h2>Повышенный уровень</h2>
+            <p>Несколько конструкций в одном предложении. Рекомендуется после базового.</p>
+          </div>
+          <div class="blocks" id="advancedBlocks"></div>
+        </article>
+      </div>
+
+      <div class="card menu-tools">
+        <button class="btn secondary" id="errorWorkButton" type="button" disabled>Работа над ошибками</button>
+        <button class="btn ghost" id="changeStudentButton" type="button">Изменить ученика</button>
+        <button class="btn danger" id="resetProgressButton" type="button">Сбросить прогресс</button>
+      </div>
+    </section>
+
+    <section class="view" id="trainerView">
+      <div class="card trainer-shell">
+        <header class="trainer-header">
+          <div class="trainer-topline">
+            <div class="session-label" id="sessionLabel"></div>
+            <div class="timer" id="timer">00:00</div>
+          </div>
+          <div class="progress-track" aria-label="Прогресс">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </header>
+        <div class="trainer-body" id="trainerBody"></div>
+      </div>
+    </section>
+
+    <section class="view" id="resultView">
+      <div class="card result" id="resultCard"></div>
+    </section>
+  </main>
+
+  <script>
+    "use strict";
+
+    const POS = {
+      noun: "сущ.",
+      adj: "прил.",
+      verb: "гл.",
+      pron: "мест.",
+      adv: "нареч.",
+      prep: "предл.",
+      conj: "союз",
+      part: "част."
+    };
+
+    const POS_FULL = {
+      noun: "имя существительное",
+      adj: "имя прилагательное",
+      verb: "глагол",
+      pron: "местоимение",
+      adv: "наречие",
+      prep: "предлог",
+      conj: "союз",
+      part: "частица"
+    };
+
+    const MEMBERS = {
+      subj: "подлежащее",
+      pred: "сказуемое",
+      def: "определение",
+      obj: "дополнение",
+      adv: "обстоятельство",
+      none: "не член предложения",
+      addr: "обращение"
+    };
+
+    const STAGES = [
+      { key: "punctuation", title: "Расставь знаки препинания", short: "Пунктуация" },
+      { key: "basis", title: "Найди грамматическую основу", short: "Основа" },
+      { key: "character", title: "Дай характеристику предложению", short: "Характеристика" },
+      { key: "complication", title: "Определи, чем осложнено предложение", short: "Осложнение" },
+      { key: "pos", title: "Подпиши части речи", short: "Части речи" },
+      { key: "members", title: "Подчеркни члены предложения", short: "Члены предложения" }
+    ];
+
+    const CHARACTER_LABELS = {
+      narr: "повествовательное",
+      quest: "вопросительное",
+      imp: "побудительное",
+      exclam: "восклицательное",
+      nonexclam: "невосклицательное",
+      two: "двусоставное",
+      one: "односоставное",
+      spread: "распространённое",
+      unspread: "нераспространённое"
+    };
+
+    const COMPLICATIONS = {
+      none: "не осложнено",
+      hom: "однородные члены",
+      addr: "обращение",
+      general: "обобщающее слово",
+      polite: "обособленная частица «пожалуйста»"
+    };
+
+    const BLOCKS = {
+      basic: ["Простые предложения", "Однородные члены", "Обращения"],
+      advanced: ["Смешанные конструкции I", "Смешанные конструкции II", "Смешанные конструкции III"]
+    };
+
+    const word = (text, pos, member) => ({ text, pos, member });
+    const task = (id, level, block, ending, words, marks, character, complications, _scheme, note, punctHint) => ({
+      id, level, block, ending, words, marks, character, complications, note, punctHint
+    });
+
+    const TASKS = [
+      task("b01", "basic", 0, ".", [
+        word("Осенний", "adj", "def"), word("ветер", "noun", "subj"), word("стремительно", "adv", "adv"),
+        word("срывает", "verb", "pred"), word("золотые", "adj", "def"), word("листья", "noun", "obj")
+      ], {}, ["narr", "nonexclam", "two", "spread"], ["none"], ["Нет схемы"],
+      "Простое двусоставное предложение без осложняющих конструкций.", "Внутри этого предложения дополнительные знаки не нужны."),
+
+      task("b02", "basic", 0, ".", [
+        word("Вдали", "adv", "adv"), word("показался", "verb", "pred"), word("густой", "adj", "def"),
+        word("сосновый", "adj", "def"), word("лес", "noun", "subj")
+      ], {}, ["narr", "nonexclam", "two", "spread"], ["none"], ["Нет схемы"],
+      "Подлежащее стоит после сказуемого: лес показался.", "Внутри предложения знаки не требуются."),
+
+      task("b03", "basic", 0, ".", [
+        word("Наступило", "verb", "pred"), word("прохладное", "adj", "def"),
+        word("осеннее", "adj", "def"), word("утро", "noun", "subj")
+      ], {}, ["narr", "nonexclam", "two", "spread"], ["none"], ["Нет схемы"],
+      "Грамматическая основа: утро наступило.", "Между неоднородными определениями запятая не ставится."),
+
+      task("b04", "basic", 0, ".", [
+        word("Серебряные", "adj", "def"), word("звёзды", "noun", "subj"), word("ярко", "adv", "adv"),
+        word("блестят", "verb", "pred"), word("на", "prep", "none"), word("тёмном", "adj", "def"),
+        word("небе", "noun", "adv")
+      ], {}, ["narr", "nonexclam", "two", "spread"], ["none"], ["Нет схемы"],
+      "Предлог не является членом предложения, но входит в состав обстоятельства «на небе».", "Внутри предложения запятые не нужны."),
+
+      task("b05", "basic", 0, ".", [
+        word("По", "prep", "none"), word("узкой", "adj", "def"), word("тропинке", "noun", "adv"),
+        word("идёт", "verb", "pred"), word("маленький", "adj", "def"), word("колючий", "adj", "def"),
+        word("ёжик", "noun", "subj")
+      ], {}, ["narr", "nonexclam", "two", "spread"], ["none"], ["Нет схемы"],
+      "Грамматическая основа расположена в обратном порядке: ёжик идёт.", "Между неоднородными определениями запятая не ставится."),
+
+      task("b06", "basic", 1, ".", [
+        word("В", "prep", "none"), word("саду", "noun", "adv"), word("растут", "verb", "pred"),
+        word("наливные", "adj", "def"), word("яблоки", "noun", "subj"), word("сладкие", "adj", "def"),
+        word("груши", "noun", "subj"), word("и", "conj", "none"), word("сочные", "adj", "def"),
+        word("сливы", "noun", "subj")
+      ], {4: ","}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", ",", "О", "и", "О"],
+      "Яблоки, груши и сливы — однородные подлежащие.", "Однородные члены перечисляются без союзов, а последние два соединены союзом «и»."),
+
+      task("b07", "basic", 1, ".", [
+        word("Мальчик", "noun", "subj"), word("не", "part", "none"), word("пошёл", "verb", "pred"),
+        word("сегодня", "adv", "adv"), word("во", "prep", "none"), word("двор", "noun", "adv"),
+        word("а", "conj", "none"), word("сел", "verb", "pred"),
+        word("за", "prep", "none"), word("уроки", "noun", "obj")
+      ], {5: ","}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", ",", "а", "О"],
+      "Однородные сказуемые «не пошёл» и «сел» соединены противительным союзом «а».", "Перед союзом «а» между однородными членами ставится запятая."),
+
+      task("b08", "basic", 1, ".", [
+        word("Белый", "adj", "def"), word("снег", "noun", "subj"), word("падал", "verb", "pred"),
+        word("на", "prep", "none"), word("землю", "noun", "adv"), word("медленно", "adv", "adv"),
+        word("плавно", "adv", "adv"), word("и", "conj", "none"), word("совершенно", "adv", "adv"),
+        word("бесшумно", "adv", "adv")
+      ], {5: ","}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", ",", "О", "и", "О"],
+      "Медленно, плавно и бесшумно — однородные обстоятельства.", "Запятая разделяет первые два обстоятельства; перед одиночным союзом «и» запятая не нужна."),
+
+      task("b09", "basic", 1, ".", [
+        word("Летом", "adv", "adv"), word("мы", "pron", "subj"), word("с", "prep", "none"),
+        word("удовольствием", "noun", "adv"), word("купались", "verb", "pred"), word("в", "prep", "none"),
+        word("речке", "noun", "adv"), word("загорали", "verb", "pred"), word("на", "prep", "none"),
+        word("тёплом", "adj", "def"), word("песке", "noun", "adv"), word("и", "conj", "none"),
+        word("собирали", "verb", "pred"), word("лесные", "adj", "def"), word("ягоды", "noun", "obj")
+      ], {6: ","}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", ",", "О", "и", "О"],
+      "Купались, загорали и собирали — однородные сказуемые при подлежащем «мы».", "Первые два сказуемых перечисляются без союза, поэтому между ними нужна запятая."),
+
+      task("b10", "basic", 1, ".", [
+        word("На", "prep", "none"), word("рабочем", "adj", "def"), word("столе", "noun", "adv"),
+        word("аккуратно", "adv", "adv"), word("лежат", "verb", "pred"), word("учебники", "noun", "subj"),
+        word("ручки", "noun", "subj"), word("цветные", "adj", "def"), word("карандаши", "noun", "subj")
+      ], {5: ",", 6: ","}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", ",", "О", ",", "О"],
+      "Учебники, ручки, карандаши — однородные подлежащие без союзов.", "Между тремя однородными членами без союзов нужны две запятые."),
+
+      task("b11", "basic", 2, "!", [
+        word("Ребята", "noun", "addr"), word("живите", "verb", "pred"), word("дружно", "adv", "adv"),
+        word("и", "conj", "none"), word("помогайте", "verb", "pred"), word("товарищам", "noun", "obj")
+      ], {0: ","}, ["imp", "exclam", "one", "spread"], ["addr", "hom"], ["[О]", ",", "О", "и", "О"],
+      "«Ребята» — обращение, а не подлежащее. Главный член выражен однородными сказуемыми «живите и помогайте».", "Обращение в начале предложения отделяется запятой."),
+
+      task("b12", "basic", 2, "?", [
+        word("Куда", "adv", "adv"), word("ты", "pron", "subj"), word("летишь", "verb", "pred"),
+        word("так", "adv", "adv"), word("быстро", "adv", "adv"), word("маленькая", "adj", "addr"),
+        word("птичка", "noun", "addr")
+      ], {4: ","}, ["quest", "nonexclam", "two", "spread"], ["addr"], ["…", ",", "[О]"],
+      "Обращение «маленькая птичка» находится в конце предложения.", "Обращение в конце отделяется одной запятой."),
+
+      task("b13", "basic", 2, ".", [
+        word("Дорогой", "adj", "addr"), word("друг", "noun", "addr"), word("я", "pron", "subj"),
+        word("благодарю", "verb", "pred"), word("тебя", "pron", "obj"), word("за", "prep", "none"),
+        word("интересную", "adj", "def"), word("и", "conj", "none"), word("полезную", "adj", "def"),
+        word("книгу", "noun", "obj")
+      ], {1: ","}, ["narr", "nonexclam", "two", "spread"], ["addr", "hom"], ["[О]", ",", "…", "О", "и", "О"],
+      "«Дорогой друг» — обращение. «Интересную и полезную» — однородные определения.", "Обращение стоит в начале; между определениями с одиночным союзом «и» запятая не ставится."),
+
+      task("b14", "basic", 2, ".", [
+        word("Бабушка", "noun", "addr"), word("расскажи", "verb", "pred"), word("мне", "pron", "obj"),
+        word("длинную", "adj", "def"), word("сказку", "noun", "obj"), word("перед", "prep", "none"),
+        word("сном", "noun", "adv")
+      ], {0: ","}, ["imp", "nonexclam", "one", "spread"], ["addr"], ["[О]", ",", "…"],
+      "«Бабушка» — обращение. В предложении один главный член — сказуемое «расскажи».", "Обращение в начале предложения отделяется запятой."),
+
+      task("b15", "basic", 2, "!", [
+        word("Пожалуйста", "part", "none"), word("не", "part", "none"), word("шумите", "verb", "pred"),
+        word("в", "prep", "none"), word("читальном", "adj", "def"), word("зале", "noun", "adv"),
+        word("ученики", "noun", "addr")
+      ], {0: ",", 5: ","}, ["imp", "exclam", "one", "spread"], ["polite", "addr"], ["Пожалуйста", ",", "…", ",", "[О]"],
+      "Частица «пожалуйста» и обращение «ученики» обособляются. Оба слова не являются членами предложения.", "Проверь начало предложения и обращение в конце."),
+
+      task("a01", "advanced", 0, ".", [
+        word("Весёлые", "adj", "def"), word("синицы", "noun", "subj"), word("юркие", "adj", "def"),
+        word("воробьи", "noun", "subj"), word("и", "conj", "none"), word("красногрудые", "adj", "def"),
+        word("снегири", "noun", "subj"), word("слетелись", "verb", "pred"), word("к", "prep", "none"),
+        word("нашей", "pron", "def"), word("новой", "adj", "def"), word("кормушке", "noun", "adv")
+      ], {1: ","}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", ",", "О", "и", "О"],
+      "Синицы, воробьи и снегири — однородные подлежащие.", "Найди границы трёх групп однородных подлежащих."),
+
+      task("a02", "advanced", 0, "!", [
+        word("Дорогие", "adj", "addr"), word("друзья", "noun", "addr"), word("никогда", "adv", "adv"),
+        word("не", "part", "none"), word("забывайте", "verb", "pred"), word("родную", "adj", "def"),
+        word("школу", "noun", "obj"), word("и", "conj", "none"), word("заботливых", "adj", "def"),
+        word("учителей", "noun", "obj")
+      ], {1: ","}, ["imp", "exclam", "one", "spread"], ["addr", "hom"], ["[О]", ",", "…", "О", "и", "О"],
+      "«Дорогие друзья» — обращение. Школу и учителей — однородные дополнения.", "Обращение стоит в начале, а однородные дополнения соединены одиночным союзом."),
+
+      task("a03", "advanced", 0, ".", [
+        word("В", "prep", "none"), word("плетёной", "adj", "def"), word("корзинке", "noun", "adv"),
+        word("лежали", "verb", "pred"), word("разные", "adj", "def"), word("лесные", "adj", "def"),
+        word("дары", "noun", "subj"), word("крепкие", "adj", "def"), word("боровики", "noun", "subj"),
+        word("рыжие", "adj", "def"), word("лисички", "noun", "subj"), word("скользкие", "adj", "def"),
+        word("маслята", "noun", "subj")
+      ], {6: ":", 8: ",", 10: ","}, ["narr", "nonexclam", "two", "spread"], ["general", "hom"], ["⊙", ":", "О", ",", "О", ",", "О"],
+      "«Дары» — обобщающее слово перед перечислением однородных подлежащих.", "После обобщающего слова перед перечислением ставится двоеточие; элементы перечисления разделяются запятыми."),
+
+      task("a04", "advanced", 0, ".", [
+        word("Осеннее", "adj", "def"), word("солнце", "noun", "subj"), word("светило", "verb", "pred"),
+        word("ярко", "adv", "adv"), word("но", "conj", "none"), word("совершенно", "adv", "adv"),
+        word("не", "part", "none"), word("грело", "verb", "pred"), word("холодную", "adj", "def"),
+        word("землю", "noun", "obj")
+      ], {3: ","}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", ",", "но", "О"],
+      "Светило, но не грело — однородные сказуемые с противительным союзом.", "Перед противительным союзом «но» ставится запятая."),
+
+      task("a05", "advanced", 0, "?", [
+        word("О", "prep", "none"), word("чём", "pron", "obj"), word("ты", "pron", "subj"),
+        word("так", "adv", "adv"), word("грустно", "adv", "adv"), word("и", "conj", "none"),
+        word("протяжно", "adv", "adv"), word("поёшь", "verb", "pred"), word("ночной", "adj", "addr"),
+        word("степной", "adj", "addr"), word("ветерок", "noun", "addr")
+      ], {7: ","}, ["quest", "nonexclam", "two", "spread"], ["hom", "addr"], ["О", "и", "О", ",", "[О]"],
+      "Грустно и протяжно — однородные обстоятельства; «ночной степной ветерок» — обращение.", "Обращение находится в конце вопросительного предложения."),
+
+      task("a06", "advanced", 1, ".", [
+        word("Ни", "conj", "none"), word("в", "prep", "none"), word("солнечные", "adj", "def"),
+        word("дни", "noun", "adv"), word("ни", "conj", "none"), word("в", "prep", "none"),
+        word("тёмные", "adj", "def"), word("ночи", "noun", "adv"), word("не", "part", "none"),
+        word("замолкал", "verb", "pred"), word("тревожный", "adj", "def"), word("шум", "noun", "subj"),
+        word("штормового", "adj", "def"), word("моря", "noun", "def")
+      ], {3: ","}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["ни", "О", ",", "ни", "О"],
+      "Обстоятельства соединены повторяющимся союзом «ни… ни…».", "Между однородными членами с повторяющимся союзом нужна запятая."),
+
+      task("a07", "advanced", 1, "!", [
+        word("Уважаемые", "adj", "addr"), word("пассажиры", "noun", "addr"), word("пристегните", "verb", "pred"),
+        word("ремни", "noun", "obj"), word("безопасности", "noun", "def"), word("и", "conj", "none"),
+        word("приготовьтесь", "verb", "pred"), word("к", "prep", "none"), word("скорому", "adj", "def"),
+        word("взлёту", "noun", "obj")
+      ], {1: ","}, ["imp", "exclam", "one", "spread"], ["addr", "hom"], ["[О]", ",", "О", "и", "О"],
+      "«Уважаемые пассажиры» — обращение; пристегните и приготовьтесь — однородные сказуемые.", "Обращение в начале отделяется запятой; перед одиночным союзом «и» запятая не ставится."),
+
+      task("a08", "advanced", 1, ".", [
+        word("Тяжёлые", "adj", "def"), word("грозовые", "adj", "def"), word("тучи", "noun", "subj"),
+        word("быстро", "adv", "adv"), word("заволокли", "verb", "pred"), word("всё", "pron", "def"),
+        word("небо", "noun", "obj"), word("и", "conj", "none"), word("спрятали", "verb", "pred"),
+        word("яркое", "adj", "def"), word("солнце", "noun", "obj")
+      ], {}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", "и", "О"],
+      "Заволокли и спрятали — однородные сказуемые с одиночным союзом «и».", "Иногда предложение осложнено однородными членами, но запятая не требуется."),
+
+      task("a09", "advanced", 1, ".", [
+        word("Для", "prep", "none"), word("долгого", "adj", "def"), word("похода", "noun", "adv"),
+        word("я", "pron", "subj"), word("купил", "verb", "pred"), word("необходимые", "adj", "def"),
+        word("вещи", "noun", "obj"), word("палатку", "noun", "obj"), word("спальный", "adj", "def"),
+        word("мешок", "noun", "obj"), word("котелок", "noun", "obj"), word("и", "conj", "none"),
+        word("компас", "noun", "obj")
+      ], {6: ":", 7: ",", 9: ","}, ["narr", "nonexclam", "two", "spread"], ["general", "hom"], ["⊙", ":", "О", ",", "О", ",", "О", "и", "О"],
+      "«Вещи» — обобщающее слово перед четырьмя однородными дополнениями.", "После обобщающего слова ставится двоеточие; перечисление разделяется по обычному правилу."),
+
+      task("a10", "advanced", 1, ".", [
+        word("Спой", "verb", "pred"), word("соловей", "noun", "addr"), word("звонкую", "adj", "def"),
+        word("песню", "noun", "obj"), word("и", "conj", "none"), word("разбуди", "verb", "pred"),
+        word("сонный", "adj", "def"), word("лес", "noun", "obj")
+      ], {0: ",", 1: ","}, ["imp", "nonexclam", "one", "spread"], ["addr", "hom"], ["О", ",", "[О]", ",", "…", "и", "О"],
+      "Обращение «соловей» находится внутри предложения; спой и разбуди — однородные сказуемые.", "Обращение в середине выделяется запятыми с двух сторон."),
+
+      task("a11", "advanced", 2, ".", [
+        word("Вдруг", "adv", "adv"), word("из-за", "prep", "none"), word("густого", "adj", "def"),
+        word("хвойного", "adj", "def"), word("леса", "noun", "adv"), word("выплыла", "verb", "pred"),
+        word("большая", "adj", "def"), word("луна", "noun", "subj"), word("и", "conj", "none"),
+        word("осветила", "verb", "pred"), word("сонную", "adj", "def"), word("лесную", "adj", "def"),
+        word("поляну", "noun", "obj")
+      ], {}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", "и", "О"],
+      "Выплыла и осветила — однородные сказуемые с одиночным союзом.", "Проверь: всегда ли между однородными членами нужна запятая?"),
+
+      task("a12", "advanced", 2, "!", [
+        word("Ученики", "noun", "addr"), word("собирайте", "verb", "pred"), word("свои", "pron", "def"),
+        word("вещи", "noun", "obj"), word("быстро", "adv", "adv"), word("аккуратно", "adv", "adv"),
+        word("и", "conj", "none"), word("без", "prep", "none"), word("лишнего", "adj", "def"),
+        word("шума", "noun", "adv")
+      ], {0: ",", 4: ","}, ["imp", "exclam", "one", "spread"], ["addr", "hom"], ["[О]", ",", "О", ",", "О", "и", "О"],
+      "«Ученики» — обращение. Быстро, аккуратно и без лишнего шума — однородные обстоятельства.", "Нужно оформить и обращение, и перечисление обстоятельств."),
+
+      task("a13", "advanced", 2, ".", [
+        word("На", "prep", "none"), word("тонких", "adj", "def"), word("ветках", "noun", "adv"),
+        word("берёз", "noun", "def"), word("осин", "noun", "def"), word("и", "conj", "none"),
+        word("раскидистых", "adj", "def"), word("клёнов", "noun", "def"), word("дрожали", "verb", "pred"),
+        word("прозрачные", "adj", "def"), word("капли", "noun", "subj"), word("утренней", "adj", "def"),
+        word("росы", "noun", "def")
+      ], {3: ","}, ["narr", "nonexclam", "two", "spread"], ["hom"], ["О", ",", "О", "и", "О"],
+      "Берёз, осин и клёнов — однородные несогласованные определения к слову «ветках».", "Три однородных члена образуют перечисление с одиночным союзом перед последним элементом."),
+
+      task("a14", "advanced", 2, "!", [
+        word("Милый", "adj", "addr"), word("дедушка", "noun", "addr"), word("забери", "verb", "pred"),
+        word("меня", "pron", "obj"), word("отсюда", "adv", "adv"), word("поскорее", "adv", "adv"),
+        word("в", "prep", "none"), word("деревню", "noun", "adv")
+      ], {1: ","}, ["imp", "exclam", "one", "spread"], ["addr"], ["[О]", ",", "…"],
+      "«Милый дедушка» — распространённое обращение. В грамматическую основу оно не входит.", "Обращение занимает начало предложения."),
+
+      task("a15", "advanced", 2, ".", [
+        word("В", "prep", "none"), word("осеннем", "adj", "def"), word("лесу", "noun", "adv"),
+        word("отчётливо", "adv", "adv"), word("пахло", "verb", "pred"), word("сыростью", "noun", "obj"),
+        word("влажной", "adj", "def"), word("листвой", "noun", "obj"), word("и", "conj", "none"),
+        word("свежими", "adj", "def"), word("грибами", "noun", "obj")
+      ], {5: ","}, ["narr", "nonexclam", "one", "spread"], ["hom"], ["О", ",", "О", "и", "О"],
+      "Пахло — главный член односоставного предложения. Сыростью, листвой и грибами — однородные дополнения.", "Однородные члены перечисляются, последние два соединены союзом «и».")
+    ];
+
+    const TASK_MAP = Object.fromEntries(TASKS.map(item => [item.id, item]));
+    const STORAGE_KEY = "syntacticPracticum6_v1";
+
+    let appState = loadState();
+    let session = null;
+    let timerHandle = null;
+    let stageLocked = false;
+    let nextAction = null;
+    let punctuationAnswers = {};
+    let basisAnswers = {};
+    let characterAnswers = {};
+    let complicationAnswers = new Set();
+    let posAnswers = {};
+    let memberAnswers = {};
+    let activeWord = null;
+    let activeTool = null;
+    let wrongTokenIndexes = new Set();
+
+    const views = [...document.querySelectorAll(".view")];
+    const startView = document.getElementById("startView");
+    const menuView = document.getElementById("menuView");
+    const trainerView = document.getElementById("trainerView");
+    const resultView = document.getElementById("resultView");
+    const homeButton = document.getElementById("homeButton");
+    const studentName = document.getElementById("studentName");
+    const classLetter = document.getElementById("classLetter");
+    const formError = document.getElementById("formError");
+    const continueButton = document.getElementById("continueButton");
+    const trainerBody = document.getElementById("trainerBody");
+
+    function defaultState() {
+      return {
+        profile: { name: "", classLetter: "" },
+        completed: {},
+        errors: [],
+        activeSession: null
+      };
+    }
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return { ...defaultState(), ...saved };
+      } catch {
+        return defaultState();
+      }
+    }
+
+    function saveState() {
+      appState.activeSession = session;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    }
+
+    function showView(target) {
+      views.forEach(view => view.classList.toggle("active", view === target));
+      homeButton.hidden = target === startView || target === menuView;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatTime(totalSeconds) {
+      const seconds = Math.max(0, Math.floor(totalSeconds));
+      const minutes = Math.floor(seconds / 60);
+      const rest = seconds % 60;
+      return `${String(minutes).padStart(2, "0")}:${String(rest).padStart(2, "0")}`;
+    }
+
+    function nowSeconds() {
+      return Math.floor(Date.now() / 1000);
+    }
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function setTheme(level) {
+      if (level === "advanced") {
+        document.documentElement.style.setProperty("--accent", "#b4363f");
+        document.documentElement.style.setProperty("--accent-dark", "#7d2029");
+        document.documentElement.style.setProperty("--accent-2", "#fff0f1");
+      } else {
+        document.documentElement.style.setProperty("--accent", "#245ba8");
+        document.documentElement.style.setProperty("--accent-dark", "#163f7c");
+        document.documentElement.style.setProperty("--accent-2", "#e9f2ff");
+      }
+    }
+
+    function init() {
+      studentName.value = appState.profile.name || "";
+      classLetter.value = appState.profile.classLetter || "";
+      continueButton.hidden = !appState.activeSession;
+      renderMenu();
+    }
+
+    function readProfile() {
+      const name = studentName.value.trim().replace(/\s+/g, " ");
+      const letter = classLetter.value.trim().toUpperCase();
+      if (name.length < 3) {
+        formError.textContent = "Введи фамилию и имя.";
+        studentName.focus();
+        return null;
+      }
+      if (!/^[А-ЯЁA-Z]{1,2}$/.test(letter)) {
+        formError.textContent = "Укажи букву класса.";
+        classLetter.focus();
+        return null;
+      }
+      formError.textContent = "";
+      return { name, classLetter: letter };
+    }
+
+    function openMenu() {
+      const profile = readProfile();
+      if (!profile) return;
+      appState.profile = profile;
+      session = null;
+      saveState();
+      renderMenu();
+      showView(menuView);
+    }
+
+    function renderMenu() {
+      const badge = document.getElementById("studentBadge");
+      if (badge) {
+        badge.textContent = appState.profile.name
+          ? `${appState.profile.name} · 6 «${appState.profile.classLetter}»`
+          : "Выбери учебный маршрут";
+      }
+      renderBlockList("basic", document.getElementById("basicBlocks"));
+      renderBlockList("advanced", document.getElementById("advancedBlocks"));
+      const errorButton = document.getElementById("errorWorkButton");
+      if (errorButton) {
+        const count = appState.errors.length;
+        errorButton.disabled = count === 0;
+        errorButton.textContent = count ? `Работа над ошибками · ${count}` : "Работа над ошибками";
+      }
+    }
+
+    function renderBlockList(level, container) {
+      if (!container) return;
+      container.innerHTML = "";
+      BLOCKS[level].forEach((title, blockIndex) => {
+        const key = `${level}-${blockIndex}`;
+        const record = appState.completed[key];
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "block-btn";
+        button.innerHTML = `
+          <span class="block-number">${blockIndex + 1}</span>
+          <span>
+            <span class="block-title">${escapeHtml(title)}</span>
+            <span class="block-meta">5 предложений · полный разбор</span>
+          </span>
+          <span class="block-status">${record ? `Лучший результат: ${record.percent}%` : "Не пройден"}</span>
+        `;
+        button.addEventListener("click", () => startBlock(level, blockIndex));
+        container.append(button);
+      });
+    }
+
+    function emptyStats() {
+      return Object.fromEntries(STAGES.map(stage => [stage.key, { first: 0, total: 0 }]));
+    }
+
+    function startBlock(level, blockIndex) {
+      const taskIds = TASKS.filter(item => item.level === level && item.block === blockIndex).map(item => item.id);
+      session = {
+        kind: "block",
+        level,
+        blockIndex,
+        taskIds,
+        index: 0,
+        stageIndex: 0,
+        stageAttempts: 0,
+        taskHadError: false,
+        errorsThisSession: [],
+        stats: emptyStats(),
+        startedAt: nowSeconds()
+      };
+      saveState();
+      startSessionView();
+    }
+
+    function startErrorWork() {
+      const taskIds = appState.errors.filter(id => TASK_MAP[id]);
+      if (!taskIds.length) return;
+      const level = taskIds.some(id => TASK_MAP[id].level === "advanced") ? "advanced" : "basic";
+      session = {
+        kind: "errors",
+        level,
+        blockIndex: null,
+        taskIds,
+        index: 0,
+        stageIndex: 0,
+        stageAttempts: 0,
+        taskHadError: false,
+        errorsThisSession: [],
+        stats: emptyStats(),
+        startedAt: nowSeconds()
+      };
+      saveState();
+      startSessionView();
+    }
+
+    function resumeSession() {
+      if (!appState.activeSession) return;
+      const candidate = appState.activeSession;
+      if (!candidate.taskIds?.every(id => TASK_MAP[id])) {
+        appState.activeSession = null;
+        saveState();
+        continueButton.hidden = true;
+        return;
+      }
+      session = candidate;
+      startSessionView();
+    }
+
+    function startSessionView() {
+      setTheme(session.level);
+      resetStageInputs();
+      showView(trainerView);
+      startTimer();
+      renderStage();
+    }
+
+    function startTimer() {
+      clearInterval(timerHandle);
+      updateTimer();
+      timerHandle = setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer() {
+      if (!session) return;
+      document.getElementById("timer").textContent = formatTime(nowSeconds() - session.startedAt);
+    }
+
+    function currentTask() {
+      return TASK_MAP[session.taskIds[session.index]];
+    }
+
+    function sessionTitle() {
+      if (session.kind === "errors") return "Работа над ошибками";
+      const levelName = session.level === "basic" ? "Базовый уровень" : "Повышенный уровень";
+      return `${levelName} · ${BLOCKS[session.level][session.blockIndex]}`;
+    }
+
+    function updateTrainerHeader() {
+      document.getElementById("sessionLabel").textContent =
+        `${sessionTitle()} · предложение ${session.index + 1} из ${session.taskIds.length}`;
+      const completedSteps = session.index * STAGES.length + Math.min(session.stageIndex, STAGES.length);
+      const allSteps = session.taskIds.length * STAGES.length;
+      document.getElementById("progressFill").style.width = `${(completedSteps / allSteps) * 100}%`;
+    }
+
+    function resetStageInputs() {
+      stageLocked = false;
+      nextAction = null;
+      punctuationAnswers = {};
+      basisAnswers = {};
+      characterAnswers = {};
+      complicationAnswers = new Set();
+      posAnswers = {};
+      memberAnswers = {};
+      activeWord = null;
+      activeTool = null;
+      wrongTokenIndexes = new Set();
+    }
+
+    function renderStage() {
+      if (!session) return;
+      updateTrainerHeader();
+      resetStageInputs();
+      const item = currentTask();
+      if (session.stageIndex >= STAGES.length) {
+        renderReview(item);
+        saveState();
+        return;
+      }
+      const stage = STAGES[session.stageIndex];
+      const isBasic = session.level === "basic";
+      trainerBody.innerHTML = `
+        <div class="stage-kicker">Шаг ${session.stageIndex + 1} из ${STAGES.length}</div>
+        <h2 class="stage-title">${stage.title}</h2>
+        <p class="stage-help">${stageInstruction(stage.key, isBasic)}</p>
+        <div id="stageContent"></div>
+        <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+        <div class="stage-actions">
+          <button class="btn ghost" type="button" id="leaveButton">Выйти в меню</button>
+          <button class="btn" type="button" id="checkButton">Проверить</button>
+        </div>
+      `;
+      document.getElementById("leaveButton").addEventListener("click", leaveToMenu);
+      document.getElementById("checkButton").addEventListener("click", checkCurrentStage);
+      renderStageContent(stage.key, item);
+      saveState();
+    }
+
+    function stageInstruction(key, isBasic) {
+      const instructions = {
+        punctuation: "Нажимай на промежутки между словами: пусто → запятая → двоеточие.",
+        basis: "Выбери «подлежащее» или «сказуемое», затем нажми на соответствующие слова.",
+        character: "В каждой строке выбери один вариант.",
+        complication: "Можно выбрать несколько конструкций.",
+        pos: isBasic
+          ? "Начни с выделенного слова. Выбери часть речи — тренажёр перейдёт к следующему."
+          : "Нажимай на слова в любом порядке и указывай их части речи.",
+        members: isBasic
+          ? "Главные члены уже сохранены. Разбери остальные слова по порядку."
+          : "Главные члены сохранены. Самостоятельно разметь остальные слова."
+      };
+      return instructions[key];
+    }
+
+    function renderStageContent(key, item) {
+      const content = document.getElementById("stageContent");
+      if (key === "punctuation") {
+        content.innerHTML = renderSentence(item, { punctuationMode: true });
+        bindGapButtons();
+      } else if (key === "basis") {
+        activeTool = "subj";
+        content.innerHTML = `
+          ${renderSentence(item, { interactive: "basis" })}
+          ${renderToolbox("basis")}
+        `;
+        bindWordButtons("basis");
+        bindToolButtons();
+      } else if (key === "character") {
+        content.innerHTML = `${renderSentence(item)}${renderCharacterQuestions()}`;
+        bindCharacterButtons();
+      } else if (key === "complication") {
+        content.innerHTML = `${renderSentence(item)}${renderComplicationOptions()}`;
+        bindComplicationButtons();
+      } else if (key === "pos") {
+        activeWord = 0;
+        content.innerHTML = `
+          ${renderSentence(item, { interactive: "pos" })}
+          ${renderToolbox("pos")}
+        `;
+        bindWordButtons("pos");
+        bindToolButtons();
+      } else if (key === "members") {
+        item.words.forEach((entry, index) => {
+          if (entry.member === "subj" || entry.member === "pred") memberAnswers[index] = entry.member;
+        });
+        activeWord = item.words.findIndex(entry => entry.member !== "subj" && entry.member !== "pred");
+        content.innerHTML = `
+          ${renderSentence(item, { interactive: "members" })}
+          ${renderToolbox("members")}
+        `;
+        bindWordButtons("members");
+        bindToolButtons();
+      }
+    }
+
+    function completedStageIndex(key) {
+      return STAGES.findIndex(stage => stage.key === key);
+    }
+
+    function memberClass(value) {
+      return value ? `member-${value}` : "";
+    }
+
+    function renderSentence(item, options = {}) {
+      const punctuationDone = session.stageIndex > completedStageIndex("punctuation");
+      const basisDone = session.stageIndex > completedStageIndex("basis");
+      const posDone = session.stageIndex > completedStageIndex("pos");
+      const membersDone = session.stageIndex > completedStageIndex("members");
+      const wordsHtml = item.words.map((entry, index) => {
+        let posValue = "";
+        let memberValue = "";
+        if (posDone) posValue = entry.pos;
+        if (options.interactive === "pos") posValue = posAnswers[index] || "";
+        if (membersDone) memberValue = entry.member;
+        else if (basisDone && (entry.member === "subj" || entry.member === "pred")) memberValue = entry.member;
+        if (options.interactive === "basis") memberValue = basisAnswers[index] || "";
+        if (options.interactive === "members") memberValue = memberAnswers[index] || "";
+
+        const active = activeWord === index ? "active" : "";
+        const error = wrongTokenIndexes.has(index) ? "error-token" : "";
+        const buttonStart = options.interactive
+          ? `<button type="button" class="word-token ${memberClass(memberValue)} ${active} ${error}" data-word-index="${index}">`
+          : `<span class="word-token ${memberClass(memberValue)} ${error}">`;
+        const buttonEnd = options.interactive ? "</button>" : "</span>";
+        const posText = posValue ? POS[posValue] : "";
+        const memberText = memberValue ? shortMember(memberValue) : "";
+        const wordHtml = `
+          ${buttonStart}
+            <span class="pos-tag">${escapeHtml(posText)}</span>
+            <span class="word-text">${escapeHtml(entry.text)}</span>
+            <span class="member-tag">${escapeHtml(memberText)}</span>
+          ${buttonEnd}
+        `;
+
+        let gapHtml = "";
+        if (index < item.words.length - 1) {
+          if (options.punctuationMode) {
+            const mark = punctuationAnswers[index] || "";
+            gapHtml = `<button type="button" class="gap-btn ${mark ? "has-mark" : ""}" data-gap-index="${index}" aria-label="Знак после слова ${escapeHtml(entry.text)}">${mark || "·"}</button>`;
+          } else {
+            const mark = punctuationDone ? (item.marks[index] || "") : "";
+            gapHtml = `<span class="gap-mark">${escapeHtml(mark)}</span>`;
+          }
+        }
+        return `<span class="token-pair">${wordHtml}${gapHtml}</span>`;
+      }).join("");
+      return `<div class="sentence-board" id="sentenceBoard">${wordsHtml}<span class="ending-mark">${escapeHtml(item.ending)}</span></div>`;
+    }
+
+    function shortMember(value) {
+      const labels = {
+        subj: "подл.",
+        pred: "сказ.",
+        def: "опр.",
+        obj: "доп.",
+        adv: "обст.",
+        none: "не член",
+        addr: "обращ."
+      };
+      return labels[value] || "";
+    }
+
+    function renderToolbox(type) {
+      let tools;
+      if (type === "basis") {
+        tools = [["subj", "Подлежащее"], ["pred", "Сказуемое"], ["erase", "Стереть"]];
+      } else if (type === "pos") {
+        tools = Object.entries(POS_FULL).map(([key, label]) => [key, label]);
+      } else {
+        tools = Object.entries(MEMBERS).map(([key, label]) => [key, label]);
+      }
+      return `
+        <div class="toolbox">
+          <div class="toolbox-title">${type === "pos" && activeWord !== null ? `Выбрано слово: «${escapeHtml(currentTask().words[activeWord].text)}»` : "Выбери обозначение"}</div>
+          <div class="tools-row">
+            ${tools.map(([key, label]) => `<button type="button" class="tool-btn ${activeTool === key ? "selected" : ""} ${key === "erase" ? "erase" : ""}" data-tool="${key}">${escapeHtml(label)}</button>`).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCharacterQuestions() {
+      const groups = [
+        ["purpose", "По цели высказывания", [["narr", "Повествовательное"], ["quest", "Вопросительное"], ["imp", "Побудительное"]]],
+        ["emotion", "По эмоциональной окраске", [["nonexclam", "Невосклицательное"], ["exclam", "Восклицательное"]]],
+        ["structure", "По главным членам", [["two", "Двусоставное"], ["one", "Односоставное"]]],
+        ["spread", "По наличию второстепенных членов", [["spread", "Распространённое"], ["unspread", "Нераспространённое"]]]
+      ];
+      return `<div class="question-grid">${groups.map(([group, title, options]) => `
+        <div class="question-group">
+          <h3>${title}</h3>
+          <div class="options">
+            ${options.map(([value, label]) => `<button type="button" class="option-btn" data-char-group="${group}" data-char-value="${value}">${label}</button>`).join("")}
+          </div>
+        </div>
+      `).join("")}</div>`;
+    }
+
+    function renderComplicationOptions() {
+      return `
+        <div class="toolbox">
+          <div class="toolbox-title">Выбери все подходящие варианты</div>
+          <div class="tools-row">
+            ${Object.entries(COMPLICATIONS).map(([key, label]) =>
+              `<button type="button" class="option-btn" data-complication="${key}">${escapeHtml(label)}</button>`
+            ).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function bindGapButtons() {
+      document.querySelectorAll("[data-gap-index]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (stageLocked) return;
+          const index = Number(button.dataset.gapIndex);
+          const cycle = ["", ",", ":"];
+          const current = punctuationAnswers[index] || "";
+          const next = cycle[(cycle.indexOf(current) + 1) % cycle.length];
+          if (next) punctuationAnswers[index] = next;
+          else delete punctuationAnswers[index];
+          renderStageContent("punctuation", currentTask());
+        });
+      });
+    }
+
+    function bindWordButtons(type) {
+      document.querySelectorAll("[data-word-index]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (stageLocked) return;
+          const index = Number(button.dataset.wordIndex);
+          wrongTokenIndexes.clear();
+          if (type === "basis") {
+            if (!activeTool || activeTool === "erase") delete basisAnswers[index];
+            else basisAnswers[index] = activeTool;
+          } else {
+            activeWord = index;
+          }
+          refreshInteractiveStage(type);
+        });
+      });
+    }
+
+    function bindToolButtons() {
+      document.querySelectorAll("[data-tool]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (stageLocked) return;
+          const tool = button.dataset.tool;
+          const key = STAGES[session.stageIndex].key;
+          wrongTokenIndexes.clear();
+          if (key === "basis") {
+            activeTool = tool;
+          } else if (activeWord !== null) {
+            if (key === "pos") {
+              posAnswers[activeWord] = tool;
+              activeWord = nextUnansweredWord(posAnswers, currentTask().words.length, activeWord);
+            } else if (key === "members") {
+              memberAnswers[activeWord] = tool;
+              activeWord = nextUnansweredMember(currentTask(), activeWord);
+            }
+          }
+          refreshInteractiveStage(key);
+        });
+      });
+    }
+
+    function refreshInteractiveStage(key) {
+      const content = document.getElementById("stageContent");
+      if (!content) return;
+      content.innerHTML = `
+        ${renderSentence(currentTask(), { interactive: key })}
+        ${renderToolbox(key)}
+      `;
+      bindWordButtons(key);
+      bindToolButtons();
+    }
+
+    function nextUnansweredWord(answers, length, fromIndex) {
+      for (let offset = 1; offset <= length; offset += 1) {
+        const index = (fromIndex + offset) % length;
+        if (!answers[index]) return index;
+      }
+      return null;
+    }
+
+    function nextUnansweredMember(item, fromIndex) {
+      const length = item.words.length;
+      for (let offset = 1; offset <= length; offset += 1) {
+        const index = (fromIndex + offset) % length;
+        if (!memberAnswers[index]) return index;
+      }
+      return null;
+    }
+
+    function bindCharacterButtons() {
+      document.querySelectorAll("[data-char-group]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (stageLocked) return;
+          const group = button.dataset.charGroup;
+          characterAnswers[group] = button.dataset.charValue;
+          document.querySelectorAll(`[data-char-group="${group}"]`).forEach(item => item.classList.remove("selected"));
+          button.classList.add("selected");
+        });
+      });
+    }
+
+    function bindComplicationButtons() {
+      document.querySelectorAll("[data-complication]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (stageLocked) return;
+          const value = button.dataset.complication;
+          if (value === "none") {
+            complicationAnswers.clear();
+            complicationAnswers.add("none");
+          } else {
+            complicationAnswers.delete("none");
+            if (complicationAnswers.has(value)) complicationAnswers.delete(value);
+            else complicationAnswers.add(value);
+          }
+          document.querySelectorAll("[data-complication]").forEach(item => {
+            item.classList.toggle("selected", complicationAnswers.has(item.dataset.complication));
+          });
+        });
+      });
+    }
+
+    function sameObject(expected, actual) {
+      const expectedKeys = Object.keys(expected).filter(key => expected[key]);
+      const actualKeys = Object.keys(actual).filter(key => actual[key]);
+      return expectedKeys.length === actualKeys.length &&
+        expectedKeys.every(key => expected[key] === actual[key]);
+    }
+
+    function sameSet(expected, actual) {
+      return expected.length === actual.size && expected.every(value => actual.has(value));
+    }
+
+    function checkCurrentStage() {
+      if (stageLocked || !session) return;
+      const item = currentTask();
+      const key = STAGES[session.stageIndex].key;
+      const result = validateStage(key, item);
+      if (result.missing) {
+        showFeedback("warn", result.message);
+        return;
+      }
+      if (result.correct) {
+        passStage(key);
+      } else {
+        failStage(key, item, result.message);
+      }
+    }
+
+    function validateStage(key, item) {
+      if (key === "punctuation") {
+        return { correct: sameObject(item.marks, punctuationAnswers), message: "Проверь расположение и вид знаков." };
+      }
+      if (key === "basis") {
+        if (!Object.keys(basisAnswers).length) return { missing: true, message: "Отметь грамматическую основу." };
+        const expected = {};
+        item.words.forEach((entry, index) => {
+          if (entry.member === "subj" || entry.member === "pred") expected[index] = entry.member;
+        });
+        return { correct: sameObject(expected, basisAnswers), message: "В грамматической основе есть неточность." };
+      }
+      if (key === "character") {
+        if (Object.keys(characterAnswers).length < 4) return { missing: true, message: "Выбери по одному варианту в каждой строке." };
+        const actual = Object.values(characterAnswers);
+        return { correct: item.character.every(value => actual.includes(value)), message: "Одна или несколько характеристик выбраны неверно." };
+      }
+      if (key === "complication") {
+        if (!complicationAnswers.size) return { missing: true, message: "Выбери хотя бы один вариант." };
+        return { correct: sameSet(item.complications, complicationAnswers), message: "Проверь все осложняющие элементы." };
+      }
+      if (key === "pos") {
+        if (Object.keys(posAnswers).length < item.words.length) return { missing: true, message: "Подпиши часть речи у каждого слова." };
+        wrongTokenIndexes = new Set(item.words.map((entry, index) => entry.pos === posAnswers[index] ? null : index).filter(index => index !== null));
+        return { correct: wrongTokenIndexes.size === 0, message: `Неверно определены части речи у ${wrongTokenIndexes.size} ${wordForm(wrongTokenIndexes.size, "слова", "слов", "слов")}.` };
+      }
+      if (key === "members") {
+        if (Object.keys(memberAnswers).length < item.words.length) return { missing: true, message: "Укажи роль каждого слова." };
+        wrongTokenIndexes = new Set(item.words.map((entry, index) => entry.member === memberAnswers[index] ? null : index).filter(index => index !== null));
+        return { correct: wrongTokenIndexes.size === 0, message: `Неверно разобраны ${wrongTokenIndexes.size} ${wordForm(wrongTokenIndexes.size, "слово", "слова", "слов")}.` };
+      }
+      return { correct: false, message: "Не удалось проверить этап." };
+    }
+
+    function wordForm(number, one, few, many) {
+      const n = Math.abs(number) % 100;
+      const n1 = n % 10;
+      if (n > 10 && n < 20) return many;
+      if (n1 > 1 && n1 < 5) return few;
+      if (n1 === 1) return one;
+      return many;
+    }
+
+    function passStage(key) {
+      stageLocked = true;
+      const firstTry = session.stageAttempts === 0;
+      session.stats[key].total += 1;
+      if (firstTry) session.stats[key].first += 1;
+      session.stageAttempts = 0;
+      session.stageIndex += 1;
+      saveState();
+      showFeedback("good", firstTry ? "Верно! Этап выполнен с первой попытки." : "Теперь верно. Разметка сохранена.");
+      const button = document.getElementById("checkButton");
+      button.textContent = session.stageIndex >= STAGES.length ? "Посмотреть полный разбор" : "Следующий шаг";
+      nextAction = renderStage;
+      button.onclick = () => {
+        if (nextAction) nextAction();
+      };
+    }
+
+    function failStage(key, item, message) {
+      session.stageAttempts += 1;
+      session.taskHadError = true;
+      if (!session.errorsThisSession.includes(item.id)) session.errorsThisSession.push(item.id);
+      const revealHint = session.level === "basic" || session.stageAttempts >= 2;
+      const hint = revealHint ? stageHint(key, item) : "Попробуй ещё раз. На повышенном уровне подсказка появится после второй попытки.";
+      showFeedback("bad", `${message} ${hint}`);
+      if (key === "pos") refreshInteractiveStage("pos");
+      if (key === "members") refreshInteractiveStage("members");
+      saveState();
+    }
+
+    function stageHint(key, item) {
+      const hints = {
+        punctuation: item.punctHint,
+        basis: "Обращение никогда не входит в грамматическую основу. У сказуемого может быть несколько слов.",
+        character: `Обрати внимание на конечный знак «${item.ending}» и количество главных членов.`,
+        complication: "Проверь обращения, перечисления и слова с общим значением перед перечислением.",
+        pos: "Сначала задай к слову общий вопрос и определи, что оно обозначает. Предлог, союз и частица не называют предмет, признак или действие.",
+        members: "Задавай вопрос от главного слова. Предлоги, союзы и частицы сами по себе членами предложения не являются."
+      };
+      return hints[key];
+    }
+
+    function showFeedback(type, message) {
+      const box = document.getElementById("feedback");
+      if (!box) return;
+      const icons = { good: "✓", bad: "×", warn: "!" };
+      box.className = `feedback show ${type}`;
+      box.innerHTML = `<span class="feedback-icon" aria-hidden="true">${icons[type]}</span><span>${escapeHtml(message)}</span>`;
+    }
+
+    function renderReview(item) {
+      const charText = item.character.map(value => CHARACTER_LABELS[value]).join(", ");
+      const complicationText = item.complications.map(value => COMPLICATIONS[value]).join(", ");
+      trainerBody.innerHTML = `
+        <div class="stage-kicker">Предложение разобрано</div>
+        <h2 class="stage-title">Сверь полный разбор</h2>
+        <p class="stage-help">Все подписи и подчёркивания показаны в эталонном виде.</p>
+        ${renderSentence(item)}
+        <div class="review-card">
+          <h3>${session.taskHadError ? "Есть материал для повторения" : "Отличная работа без ошибок"}</h3>
+          <p>${escapeHtml(item.note)}</p>
+          <div class="review-grid">
+            <div class="review-item"><span>Характеристика</span>${escapeHtml(charText)}</div>
+            <div class="review-item"><span>Осложнение</span>${escapeHtml(complicationText)}</div>
+            <div class="review-item"><span>Грамматическая основа</span>${escapeHtml(basisText(item))}</div>
+          </div>
+        </div>
+        <div class="stage-actions">
+          <button class="btn ghost" type="button" id="leaveButton">Выйти в меню</button>
+          <button class="btn" type="button" id="nextSentenceButton">${session.index + 1 === session.taskIds.length ? "Завершить блок" : "Следующее предложение"}</button>
+        </div>
+      `;
+      document.getElementById("leaveButton").addEventListener("click", leaveToMenu);
+      document.getElementById("nextSentenceButton").addEventListener("click", completeTask);
+    }
+
+    function basisText(item) {
+      const subjects = item.words.filter(entry => entry.member === "subj").map(entry => entry.text.toLowerCase());
+      const predicates = item.words.filter(entry => entry.member === "pred").map(entry => entry.text.toLowerCase());
+      if (!subjects.length) return predicates.join(", ");
+      return `${subjects.join(", ")} — ${predicates.join(", ")}`;
+    }
+
+    function completeTask() {
+      const item = currentTask();
+      if (session.taskHadError) {
+        if (!appState.errors.includes(item.id)) appState.errors.push(item.id);
+      } else if (session.kind === "errors") {
+        appState.errors = appState.errors.filter(id => id !== item.id);
+      }
+      session.index += 1;
+      session.stageIndex = 0;
+      session.stageAttempts = 0;
+      session.taskHadError = false;
+      if (session.index >= session.taskIds.length) {
+        finishSession();
+      } else {
+        saveState();
+        renderStage();
+      }
+    }
+
+    function finishSession() {
+      clearInterval(timerHandle);
+      const finalSession = JSON.parse(JSON.stringify(session));
+      const totalFirst = Object.values(finalSession.stats).reduce((sum, entry) => sum + entry.first, 0);
+      const total = Object.values(finalSession.stats).reduce((sum, entry) => sum + entry.total, 0);
+      const percent = total ? Math.round((totalFirst / total) * 100) : 0;
+      if (finalSession.kind === "block") {
+        const key = `${finalSession.level}-${finalSession.blockIndex}`;
+        const previous = appState.completed[key];
+        if (!previous || percent > previous.percent) {
+          appState.completed[key] = { percent, date: new Date().toISOString() };
+        }
+      }
+      session = null;
+      appState.activeSession = null;
+      saveState();
+      renderResult(finalSession, percent);
+      showView(resultView);
+      renderMenu();
+    }
+
+    function renderResult(finalSession, percent) {
+      setTheme(finalSession.level);
+      const elapsed = nowSeconds() - finalSession.startedAt;
+      const mistakes = [...new Set(finalSession.errorsThisSession)];
+      const title = finalSession.kind === "errors" ? "Работа над ошибками завершена" : "Блок завершён";
+      const skills = STAGES.map(stage => {
+        const entry = finalSession.stats[stage.key];
+        const skillPercent = entry.total ? Math.round((entry.first / entry.total) * 100) : 0;
+        return `<div class="skill-result"><span>${stage.short}</span><strong>${skillPercent}%</strong></div>`;
+      }).join("");
+      const mistakeItems = mistakes.length
+        ? `<h3>Предложения для повторения</h3><ul class="mistakes-list">${mistakes.map(id => `<li>${escapeHtml(fullSentence(TASK_MAP[id]))}</li>`).join("")}</ul>`
+        : `<div class="feedback show good"><span class="feedback-icon">✓</span><span>Все этапы выполнены без ошибок с первой попытки.</span></div>`;
+      document.getElementById("resultCard").innerHTML = `
+        <div class="result-head">
+          <div class="score-ring" style="--score-angle:${percent * 3.6}deg">${percent}%</div>
+          <div>
+            <div class="eyebrow">${escapeHtml(appState.profile.name)} · 6 «${escapeHtml(appState.profile.classLetter)}»</div>
+            <h1>${title}</h1>
+            <p class="result-meta">${escapeHtml(resultSessionName(finalSession))} · ${finalSession.taskIds.length} ${wordForm(finalSession.taskIds.length, "предложение", "предложения", "предложений")} · ${formatTime(elapsed)}</p>
+          </div>
+        </div>
+        <h2>Результаты по навыкам</h2>
+        <div class="skills-grid">${skills}</div>
+        ${mistakeItems}
+        <div class="result-actions">
+          <button class="btn" type="button" id="resultMenuButton">Вернуться к уровням</button>
+          <button class="btn secondary" type="button" id="resultErrorsButton" ${appState.errors.length ? "" : "disabled"}>Исправить ошибки</button>
+          <button class="btn ghost" type="button" id="printButton">Печать / сохранить PDF</button>
+        </div>
+      `;
+      document.getElementById("resultMenuButton").addEventListener("click", () => {
+        renderMenu();
+        showView(menuView);
+      });
+      document.getElementById("resultErrorsButton").addEventListener("click", startErrorWork);
+      document.getElementById("printButton").addEventListener("click", () => window.print());
+    }
+
+    function resultSessionName(finalSession) {
+      if (finalSession.kind === "errors") return "Работа над ошибками";
+      const level = finalSession.level === "basic" ? "Базовый уровень" : "Повышенный уровень";
+      return `${level}: ${BLOCKS[finalSession.level][finalSession.blockIndex]}`;
+    }
+
+    function fullSentence(item) {
+      return item.words.map((entry, index) => `${entry.text}${item.marks[index] || ""}`).join(" ") + item.ending;
+    }
+
+    function leaveToMenu() {
+      saveState();
+      clearInterval(timerHandle);
+      renderMenu();
+      showView(menuView);
+    }
+
+    function resetProgress() {
+      const confirmed = window.confirm("Удалить результаты, сохранённые блоки и список ошибок? Имя ученика останется.");
+      if (!confirmed) return;
+      appState.completed = {};
+      appState.errors = [];
+      appState.activeSession = null;
+      session = null;
+      saveState();
+      renderMenu();
+    }
+
+    document.getElementById("openMenuButton").addEventListener("click", openMenu);
+    continueButton.addEventListener("click", resumeSession);
+    document.getElementById("errorWorkButton").addEventListener("click", startErrorWork);
+    document.getElementById("changeStudentButton").addEventListener("click", () => {
+      studentName.value = appState.profile.name || "";
+      classLetter.value = appState.profile.classLetter || "";
+      showView(startView);
+    });
+    document.getElementById("resetProgressButton").addEventListener("click", resetProgress);
+    homeButton.addEventListener("click", leaveToMenu);
+
+    classLetter.addEventListener("input", () => {
+      classLetter.value = classLetter.value.toUpperCase().replace(/[^А-ЯЁA-Z]/g, "");
+    });
+
+    init();
+  </script>
+</body>
+</html>
